@@ -1,0 +1,30 @@
+{
+  "entities": {
+    "UserProfile": {
+      "collection": "users",
+      "fields": {
+        "uid": { "type": "string", "description": "User UID matching Firebase Auth" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "photoURL": { "type": "string", "description": "User avatar URL" },
+        "createdAt": { "type": "string", "description": "Account initialization ISO timestamp" },
+        "lastLoginAt": { "type": "string", "description": "Last sign-in ISO timestamp" }
+      }
+    },
+    "Interaction": {
+      "collection": "users/{userId}/interactions",
+      "fields": {
+        "id": { "type": "string", "description": "Unique identifier for the interaction" },
+        "userId": { "type": "string", "description": "UID of author user" },
+        "title": { "type": "string", "description": "Title or primary topic of reflection" },
+        "prompt": { "type": "string", "description": "User prompt or reflection entry" },
+        "response": { "type": "string", "description": "Gemini generated response, summary, or brainstorming ideas" },
+        "category": { "type": "string", "description": "Category or type e.g. reflection, brainstorming, summary" },
+        "modelUsed": { "type": "string", "description": "Model that served the response" },
+        "createdAt": { "type": "string", "description": "ISO timestamp of interaction" },
+        "updatedAt": { "type": "string", "description": "ISO timestamp of last turn or edit" },
+        "turns": { "type": "array", "description": "Array of multi-turn conversation messages with role and content" }
+      }
+    }
+  }
+}

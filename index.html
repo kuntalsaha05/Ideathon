@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      (function() {
+        try {
+          if (typeof Window !== 'undefined' && Window.prototype) {
+            var desc = Object.getOwnPropertyDescriptor(Window.prototype, 'fetch');
+            if (desc && desc.configurable && !desc.set) {
+              Object.defineProperty(Window.prototype, 'fetch', {
+                get: desc.get,
+                set: function(v) {
+                  Object.defineProperty(this, 'fetch', {
+                    value: v,
+                    writable: true,
+                    configurable: true,
+                    enumerable: true
+                  });
+                },
+                configurable: true,
+                enumerable: desc.enumerable
+              });
+            }
+          }
+        } catch (_) {}
+
+        try {
+          var currentFetch = typeof window !== 'undefined' && typeof window.fetch === 'function'
+            ? window.fetch.bind(window)
+            : undefined;
+
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return currentFetch;
+            },
+            set: function(newFetch) {
+              currentFetch = newFetch;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (_) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gemini Reflection Journal</title>
+    <meta name="description" content="A private, user-authenticated reflection journal and conversation assistant powered by Gemini API and Cloud Firestore." />
+    <meta property="og:title" content="Gemini Reflection Journal" />
+    <meta property="og:description" content="A private, user-authenticated reflection journal and conversation assistant powered by Gemini API and Cloud Firestore." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
