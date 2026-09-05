@@ -135,3 +135,65 @@ gcloud run services update <SERVICE_NAME> \
    npm run dev
    ```
 4. Access the web app at `http://localhost:3000`.
+
+---
+
+## Publishing Directly via GitHub
+
+### Option 1: One-Click Export in Google AI Studio
+1. In the Google AI Studio top-right toolbar or **Settings** menu, click **Export** (or the GitHub icon).
+2. Select **GitHub**.
+3. Authenticate with your GitHub account and choose or create your destination repository (e.g. `gemini-reflection-journal`).
+4. Click **Confirm Export** — AI Studio will automatically push all committed project files directly to your GitHub repository.
+
+### Option 2: Push via Git CLI
+A local Git repository is already initialized on branch `main` with all files staged and committed. To publish to a new GitHub repository:
+
+```bash
+# 1. Create an empty repository on GitHub (e.g., https://github.com/<your-username>/<repo-name>)
+# 2. Link your local repository to the GitHub remote
+git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPOSITORY_NAME>.git
+
+# 3. Push to GitHub main branch
+git branch -M main
+git push -u origin main
+```
+
+---
+
+## Deploying through GitHub Pages
+
+The repository includes a pre-configured GitHub Actions workflow (`.github/workflows/deploy-pages.yml`) that builds and publishes the application directly to GitHub Pages.
+
+### Step 1: Enable GitHub Pages with GitHub Actions
+1. On GitHub, navigate to your repository.
+2. Go to **Settings** &rarr; **Pages** (under the "Code and automation" section).
+3. Under **Build and deployment** &gt; **Source**, select **GitHub Actions**.
+
+### Step 2: Authorize Your GitHub Pages Domain in Firebase
+To allow Google Sign-In and Cloud Firestore authentication on your GitHub Pages site:
+1. Open the [Firebase Console](https://console.firebase.google.com/) for your project (`ai-studio-geminireflection-d96016f3-14fd-4777-b075-a9952b1201b2`).
+2. Navigate to **Authentication** &rarr; **Settings** &rarr; **Authorized domains**.
+3. Click **Add domain** and enter your GitHub Pages host:
+   ```text
+   <YOUR_GITHUB_USERNAME>.github.io
+   ```
+
+### Step 3: Configure the Backend API Endpoint (Optional / Recommended)
+Because GitHub Pages hosts static frontends, the server-side Gemini API calls are securely processed by your deployed backend (e.g., Cloud Run):
+1. In your GitHub repository, go to **Settings** &rarr; **Secrets and variables** &rarr; **Actions** &rarr; **Variables** tab.
+2. Click **New repository variable**.
+3. Name: `VITE_API_URL`
+4. Value: Your deployed Cloud Run URL (e.g., `https://ais-dev-p3ls42y53x4qlksuo6bdud-819490054903.asia-southeast1.run.app`).
+5. Save the variable.
+
+### Step 4: Trigger the Deployment
+Push to the `main` branch:
+```bash
+git push origin main
+```
+Or go to the **Actions** tab on GitHub, select **Deploy to GitHub Pages**, and click **Run workflow**.
+
+Once complete, your app will be live at:
+`https://<YOUR_GITHUB_USERNAME>.github.io/<YOUR_REPOSITORY_NAME>/`
+

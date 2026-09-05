@@ -25,7 +25,8 @@ export async function requestGeminiReflection(
       }))
     : [];
 
-  const response = await fetch("/api/gemini/reflect", {
+  const apiBase = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+  const response = await fetch(`${apiBase}/api/gemini/reflect`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

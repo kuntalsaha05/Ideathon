@@ -14,6 +14,17 @@ const PORT = 3000;
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
+// Cross-Origin Resource Sharing (CORS) for external frontend hosting (e.g. GitHub Pages)
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+  next();
+});
+
 // Lazy initialization of Gemini SDK
 let genAIClient: GoogleGenAI | null = null;
 function getGenAI(): GoogleGenAI {
